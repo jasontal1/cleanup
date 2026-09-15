@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>After the Closing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap">
+<style>
+:root{
+  color-scheme: light dark;
+  --ground:#F3F5F4; --surface:#FFFFFF; --ink:#1D272B; --muted:#5E6B6F; --line:#D9DFDD;
+  --accent:#2F5D73; --accent-ink:#FFFFFF; --done:#3E7D4F; --warn:#A5522A; --warn-bg:#F7E7DE;
+  --p-a:#2F5D73; --p-b:#8A5A2B; --p-c:#7A4E8C; --p-all:#4F6356;
+  --p-a-bg:#E3EDF2; --p-b-bg:#F3E9DE; --p-c-bg:#EFE6F3; --p-all-bg:#E6ECE7;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ground:#141B1E; --surface:#1C2529; --ink:#E6ECEB; --muted:#9AA8AB; --line:#2F3B40;
+    --accent:#7FB3CC; --accent-ink:#0F1A1F; --done:#79BE8A; --warn:#E39A72; --warn-bg:#3A2A22;
+    --p-a:#8CC0D8; --p-b:#E0AE7A; --p-c:#C9A2DB; --p-all:#A9C2B0;
+    --p-a-bg:#22363F; --p-b-bg:#3A2E22; --p-c-bg:#342A3B; --p-all-bg:#26332B;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px)}
+.wrap{max-width:720px;margin:0 auto;padding-block:32px 48px;display:flex;flex-direction:column;gap:24px}
+h1,h2{font-family:"Zilla Slab",Georgia,"Times New Roman",serif;text-wrap:balance;margin:0}
+h1{font-size:34px;line-height:1.1;font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;font-weight:600}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:6px}
+.sub{color:var(--muted);margin:0}
+.head-actions{display:flex;flex-wrap:wrap;gap:16px;margin-top:4px}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.panel p{margin:0}
+.names{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.field{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600;min-width:0}
+.field .opt{font-weight:400}
+.field input,.field select,.field textarea{font-weight:400;font-size:15px}
+.banner{border-radius:10px;padding:10px 14px;background:var(--p-a-bg);color:var(--ink);font-size:14px}
+.banner.warn{background:var(--warn-bg);color:var(--warn);font-weight:600}
+.share{display:flex;gap:8px;flex-wrap:wrap}
+.share input{flex:1 1 260px;font-size:13px}
+.tally{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tile{border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;cursor:pointer;border:2px solid transparent;text-align:left;font:inherit}
+.tile .n{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.tile .who{font-size:13px;font-weight:600;overflow-wrap:anywhere}
+.tile[aria-pressed="true"]{border-color:currentColor}
+.o-a{background:var(--p-a-bg);color:var(--p-a)} .o-b{background:var(--p-b-bg);color:var(--p-b)}
+.o-c{background:var(--p-c-bg);color:var(--p-c)} .o-all{background:var(--p-all-bg);color:var(--p-all)}
+form.add{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end}
+form.add .wide{grid-column:1/-1}
+input,select,textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--ground);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0;width:100%}
+textarea{resize:vertical;min-height:44px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{font:inherit;font-weight:600;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:10px 18px;cursor:pointer;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.listhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.status{font-size:13px;color:var(--muted)}
+ul{list-style:none;margin:0;padding:0}
+.items{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:12px 14px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item input[type=checkbox]{width:20px;height:20px;margin:3px 0 0;accent-color:var(--done);cursor:pointer;padding:0}
+.body{display:flex;flex-direction:column;gap:4px;min-width:0}
+.title{font-weight:600;overflow-wrap:anywhere;cursor:pointer}
+.notes{color:var(--muted);font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin-top:2px}
+.chip{border-radius:999px;padding:2px 9px;border:0;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.due{color:var(--muted);font-variant-numeric:tabular-nums}
+.due.late{color:var(--warn);font-weight:600}
+.actions{display:flex;gap:2px;align-items:center}
+.edit,.del{background:none;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600;padding:4px 6px;border-radius:6px}
+.edit{color:var(--accent)}
+.del{color:var(--muted);font-size:18px;line-height:1}
+.del.armed{color:var(--warn);font-size:13px}
+.item.is-done .title{text-decoration:line-through;color:var(--muted)}
+.editform{grid-column:1/-1;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end}
+.editform .wide{grid-column:1/-1}
+.editform .row-actions{grid-column:1/-1;display:flex;gap:8px}
+.empty{padding:20px 14px;color:var(--muted)}
+details.donebox summary{cursor:pointer;font-weight:600;color:var(--muted);padding:4px 0}
+details.donebox .items{margin-top:8px}
+.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;margin:0}
+@media (max-width:560px){
+  form.add,.editform{grid-template-columns:1fr 1fr}
+  form.add .btn{grid-column:1/-1}
+  .tally{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Post-sale open items</div>
+    <h1>After the Closing</h1>
+    <p class="sub" id="subline">What Jason, Adam and Fern still need to wrap up.</p>
+    <div class="head-actions" id="head-actions" hidden>
+      <button class="linkbtn" type="button" id="copy-link">Copy share link</button>
+      <button class="linkbtn" type="button" id="toggle-names">Edit names</button>
+    </div>
+  </header>
+
+  <div class="banner" id="banner" role="status" hidden></div>
+
+  <section class="panel" id="names-panel" hidden>
+    <div class="names">
+      <label class="field" for="name-a">You<input id="name-a" maxlength="24"></label>
+      <label class="field" for="name-b">Brother<input id="name-b" maxlength="24"></label>
+      <label class="field" for="name-c">Sister<input id="name-c" maxlength="24"></label>
+      <button class="btn" type="button" id="save-names">Save names</button>
+    </div>
+  </section>
+
+  <!-- Shown until firebase-config.js is filled in -->
+  <section class="panel" id="setup" hidden>
+    <h2>Almost ready</h2>
+    <p>This app needs your Firebase settings. Paste them into <strong>firebase-config.js</strong>, then reload. The README has the steps.</p>
+    <p><a class="linkbtn" href="#demo">Preview with sample data</a></p>
+  </section>
+
+  <!-- First visit with no list in the link -->
+  <form class="panel" id="start" hidden autocomplete="off">
+    <h2>Start your checklist</h2>
+    <p class="sub">Do this once. You'll get a link to send to your brother and sister.</p>
+    <div class="names">
+      <label class="field" for="start-a">You<input id="start-a" maxlength="24" value="Jason" required></label>
+      <label class="field" for="start-b">Brother<input id="start-b" maxlength="24" value="Adam" required></label>
+      <label class="field" for="start-c">Sister<input id="start-c" maxlength="24" value="Fern" required></label>
+    </div>
+    <label style="display:flex;gap:8px;align-items:center" for="start-seed"><input type="checkbox" id="start-seed" checked style="width:auto">Start with our current 6 items</label>
+    <div><button class="btn" type="submit" id="start-btn">Create checklist</button></div>
+  </form>
+
+  <section class="panel" id="missing" hidden>
+    <h2>This link doesn't open a checklist</h2>
+    <p>Part of the link may be missing. Ask whoever sent it to use "Copy share link" and send it again.</p>
+  </section>
+
+  <main id="app" hidden style="display:flex;flex-direction:column;gap:24px">
+    <section class="panel" id="share-panel" hidden>
+      <p><strong>Your checklist is ready.</strong> Send this link to <span id="share-names">Adam and Fern</span>. Anyone with it can view and edit.</p>
+      <div class="share">
+        <input id="share-url" readonly aria-label="Share link">
+        <button class="btn" type="button" id="share-copy">Copy</button>
+      </div>
+    </section>
+
+    <div class="tally" id="tally" role="group" aria-label="Filter by person"></div>
+
+    <form class="add panel" id="add-form" autocomplete="off">
+      <label class="field wide" for="new-title">Title<input id="new-title" maxlength="120" placeholder="e.g. Cancel the gas account" required></label>
+      <label class="field wide" for="new-notes"><span>Details <span class="opt">(optional)</span></span><textarea id="new-notes" rows="2" maxlength="1000" placeholder="Who to call, what's needed, where the paperwork is"></textarea></label>
+      <label class="field" for="new-owner">Who<select id="new-owner"></select></label>
+      <label class="field" for="new-due"><span>Due <span class="opt">(optional)</span></span><input id="new-due" type="date"></label>
+      <button class="btn" type="submit" id="add-btn">Add item</button>
+    </form>
+
+    <section>
+      <div class="listhead">
+        <h2 id="list-title">Open items</h2>
+        <span class="status" id="status"></span>
+      </div>
+      <ul class="items" id="open-list" style="margin-top:10px"></ul>
+    </section>
+
+    <details class="donebox" id="done-box">
+      <summary id="done-summary">Done</summary>
+      <ul class="items" id="done-list"></ul>
+    </details>
+
+    <p class="foot">Anyone with the link can view and edit this list. Keep account numbers and passwords out of it.</p>
+  </main>
+</div>
+
+<script type="module">
+import { firebaseConfig } from './firebase-config.js';
+
+const FB = 'https://www.gstatic.com/firebasejs/10.12.2/';
+const OWNERS = ['a', 'b', 'c', 'all'];
+const DEFAULT_NAMES = { a: 'Jason', b: 'Adam', c: 'Fern' };
+const STARTER = [
+  { title: 'Cancel property insurance policies once the deed has recorded', owner: 'all', due: '2026-09-15' },
+  { title: 'Close or transfer utility accounts and confirm final meter readings', owner: 'a' },
+  { title: 'Get a copy of the final settlement statement for each of us', owner: 'b' },
+  { title: 'Send sale paperwork (settlement statement, 1099-S) to our accountants', owner: 'all' },
+  { title: 'Cancel service contracts: landscaping, snow removal, pest control, elevator', owner: 'c' },
+  { title: "Close the building bank account and split what's left", owner: 'all' }
+];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const fmtDate = s => { if (!s) return ''; const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); };
+const ms = v => typeof v === 'number' ? v : (v && v.toMillis ? v.toMillis() : Date.now());
+const blankItem = s => ({ title: s.title, notes: s.notes || '', owner: s.owner || 'all', due: s.due || '', done: false, doneAt: '' });
+const randomId = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+
+let names = { ...DEFAULT_NAMES }, items = [], filter = 'any', editingId = null, pendingRender = false;
+let store = null, listId = null;
+
+const configured = firebaseConfig && firebaseConfig.apiKey && !String(firebaseConfig.apiKey).startsWith('PASTE');
+const ownerName = o => o === 'all' ? 'All of us' : (names[o] || o);
+
+function show(id) {
+  ['setup', 'start', 'missing', 'app'].forEach(s => { $(s).hidden = s !== id; });
+  $('head-actions').hidden = id !== 'app';
+}
+function banner(msg, warn) {
+  const b = $('banner');
+  b.textContent = msg || '';
+  b.className = 'banner' + (warn ? ' warn' : '');
+  b.hidden = !msg;
+}
+function errMsg(e) {
+  const code = e && e.code;
+  if (code === 'permission-denied') return 'Firebase refused that change. Check that the rules from firestore.rules are published.';
+  if (code === 'unavailable') return "You're offline. Changes will sync when you reconnect.";
+  return 'Something went wrong saving that. Reload the page and try again.';
+}
+function flash(msg) {
+  $('status').textContent = msg;
+  clearTimeout(flash.t);
+  flash.t = setTimeout(() => { $('status').textContent = ''; }, 2000);
+}
+async function run(fn, okMsg) {
+  try { await fn(); if (okMsg) flash(okMsg); banner(''); }
+  catch (e) { console.error(e); banner(errMsg(e), true); }
+}
+
+/* ---------- Data: Firebase ---------- */
+async function firebaseStore() {
+  const [{ initializeApp }, fs] = await Promise.all([import(FB + 'firebase-app.js'), import(FB + 'firebase-firestore.js')]);
+  const db = fs.getFirestore(initializeApp(firebaseConfig));
+  const itemsCol = id => fs.collection(db, 'lists', id, 'items');
+  return {
+    async exists(id) { return (await fs.getDoc(fs.doc(db, 'lists', id))).exists(); },
+    subscribe(id, onNames, onItems, onError) {
+      fs.onSnapshot(fs.doc(db, 'lists', id), s => { if (s.exists()) onNames(s.data().names); }, onError);
+      fs.onSnapshot(itemsCol(id), s => onItems(s.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: 'estimate' }) }))), onError);
+    },
+    async createList(id, n, starter) {
+      await fs.setDoc(fs.doc(db, 'lists', id), { names: n, createdAt: fs.serverTimestamp() });
+      if (!starter.length) return;
+      const batch = fs.writeBatch(db);
+      starter.forEach(s => batch.set(fs.doc(itemsCol(id)), { ...blankItem(s), createdAt: fs.serverTimestamp(), updatedAt: fs.serverTimestamp() }));
+      await batch.commit();
+    },
+    addItem: (id, it) => fs.addDoc(itemsCol(id), { ...it, createdAt: fs.serverTimestamp(), updatedAt: fs.serverTimestamp() }),
+    updateItem: (id, itemId, patch) => fs.updateDoc(fs.doc(db, 'lists', id, 'items', itemId), { ...patch, updatedAt: fs.serverTimestamp() }),
+    deleteItem: (id, itemId) => fs.deleteDoc(fs.doc(db, 'lists', id, 'items', itemId)),
+    updateNames: (id, n) => fs.updateDoc(fs.doc(db, 'lists', id), { names: n, updatedAt: fs.serverTimestamp() })
+  };
+}
+
+/* ---------- Data: preview mode (nothing saved) ---------- */
+function demoStore() {
+  let n = { ...DEFAULT_NAMES };
+  let list = STARTER.map((s, i) => ({ id: 'd' + i, ...blankItem(s), createdAt: Date.now() + i }));
+  list[1].notes = 'PSE&G and water. Final readings the day of closing.';
+  let cbN, cbI;
+  const emit = () => { cbN && cbN({ ...n }); cbI && cbI(list.map(x => ({ ...x }))); };
+  return {
+    exists: async () => true,
+    subscribe(id, a, b) { cbN = a; cbI = b; setTimeout(emit, 0); },
+    createList: async () => {},
+    addItem: async (id, it) => { list.push({ id: 'd' + Date.now(), ...it, createdAt: Date.now() }); emit(); },
+    updateItem: async (id, itemId, p) => { Object.assign(list.find(i => i.id === itemId), p); emit(); },
+    deleteItem: async (id, itemId) => { list = list.filter(i => i.id !== itemId); emit(); },
+    updateNames: async (id, nn) => { n = nn; emit(); }
+  };
+}
+
+/* ---------- Rendering ---------- */
+function ownerOptions(selected) {
+  return OWNERS.map(o => `<option value="${o}"${o === selected ? ' selected' : ''}>${esc(ownerName(o))}</option>`).join('');
+}
+
+function row(it) {
+  if (it.id === editingId) {
+    return `<li class="item" data-key="${esc(it.id)}">
+      <form class="editform" data-edit="${esc(it.id)}" autocomplete="off">
+        <label class="field wide" for="edit-title">Title<input id="edit-title" maxlength="120" value="${esc(it.title)}" required></label>
+        <label class="field wide" for="edit-notes"><span>Details <span class="opt">(optional)</span></span><textarea id="edit-notes" rows="3" maxlength="1000">${esc(it.notes)}</textarea></label>
+        <label class="field" for="edit-owner">Who<select id="edit-owner">${ownerOptions(it.owner)}</select></label>
+        <label class="field" for="edit-due">Due<input id="edit-due" type="date" value="${esc(it.due)}"></label>
+        <div class="row-actions"><button class="btn" type="submit">Save</button><button class="btn ghost" type="button" data-act="cancel-edit">Cancel</button></div>
+      </form></li>`;
+  }
+  const late = it.due && !it.done && it.due < today();
+  const when = it.done && it.doneAt ? `<span class="due">Done ${esc(fmtDate(it.doneAt))}</span>`
+    : it.due ? `<span class="due${late ? ' late' : ''}">${late ? 'Overdue: ' : 'Due '}${esc(fmtDate(it.due))}</span>` : '';
+  return `<li class="item${it.done ? ' is-done' : ''}" data-key="${esc(it.id)}">
+    <input type="checkbox" id="chk-${esc(it.id)}" data-act="toggle" data-id="${esc(it.id)}"${it.done ? ' checked' : ''} aria-label="Mark done: ${esc(it.title)}">
+    <div class="body">
+      <label class="title" for="chk-${esc(it.id)}">${esc(it.title)}</label>
+      ${it.notes ? `<div class="notes">${esc(it.notes)}</div>` : ''}
+      <div class="meta">
+        <button type="button" class="chip o-${esc(it.owner)}" data-act="owner" data-id="${esc(it.id)}" title="Tap to change who owns this">${esc(ownerName(it.owner))}</button>
+        ${when}
+      </div>
+    </div>
+    <div class="actions">
+      <button type="button" class="edit" data-act="edit" data-id="${esc(it.id)}">Edit</button>
+      <button type="button" class="del" data-act="delete" data-id="${esc(it.id)}" aria-label="Delete ${esc(it.title)}">&times;</button>
+    </div>
+  </li>`;
+}
+
+function render() {
+  pendingRender = false;
+  $('subline').textContent = `What ${names.a}, ${names.b} and ${names.c} still need to wrap up.`;
+  $('share-names').textContent = `${names.b} and ${names.c}`;
+  const ownerSel = $('new-owner'), keep = ownerSel.value || 'a';
+  ownerSel.innerHTML = ownerOptions(keep);
+
+  const open = items.filter(i => !i.done);
+  const done = items.filter(i => i.done);
+
+  $('tally').innerHTML = OWNERS.map(o => {
+    const c = open.filter(i => i.owner === o).length;
+    return `<button type="button" class="tile o-${o}" data-owner="${o}" aria-pressed="${filter === o}"><span class="n">${c}</span><span class="who">${esc(ownerName(o))}</span></button>`;
+  }).join('');
+
+  const shown = open.filter(i => filter === 'any' || i.owner === filter)
+    .sort((x, y) => (!!x.due !== !!y.due) ? (x.due ? -1 : 1) : (x.due || '').localeCompare(y.due || '') || ms(x.createdAt) - ms(y.createdAt));
+  $('list-title').textContent = filter === 'any' ? `Open items (${open.length})` : `${ownerName(filter)}: ${shown.length} open`;
+  $('open-list').innerHTML = shown.length ? shown.map(row).join('')
+    : `<li class="empty">${filter === 'any' ? 'Nothing open. Nice work.' : `Nothing open for ${esc(ownerName(filter))}. <button type="button" class="linkbtn" data-act="clear-filter">Show everyone</button>`}</li>`;
+
+  done.sort((x, y) => (y.doneAt || '').localeCompare(x.doneAt || ''));
+  $('done-summary').textContent = `Done (${done.length})`;
+  $('done-list').innerHTML = done.length ? done.map(row).join('') : '<li class="empty">Checked-off items land here.</li>';
+}
+
+/* ---------- Actions ---------- */
+const shareUrl = () => location.origin + location.pathname + '#list=' + listId;
+
+async function copyLink(btn) {
+  const url = shareUrl();
+  try { await navigator.clipboard.writeText(url); }
+  catch { $('share-url').value = url; $('share-panel').hidden = false; $('share-url').select(); }
+  const old = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = old; }, 1600);
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act],[data-owner]');
+  if (!t) return;
+  if (t.dataset.owner) { filter = filter === t.dataset.owner ? 'any' : t.dataset.owner; render(); return; }
+  const act = t.dataset.act;
+  if (act === 'clear-filter') { filter = 'any'; render(); return; }
+  if (act === 'cancel-edit') { editingId = null; render(); return; }
+  const it = items.find(i => i.id === t.dataset.id);
+  if (!it) return;
+  if (act === 'edit') { editingId = it.id; render(); const f = $('edit-title'); f && f.focus(); return; }
+  if (act === 'owner') { run(() => store.updateItem(listId, it.id, { owner: OWNERS[(OWNERS.indexOf(it.owner) + 1) % OWNERS.length] })); return; }
+  if (act === 'delete') {
+    if (!t.classList.contains('armed')) {
+      t.classList.add('armed'); t.textContent = 'Delete?';
+      setTimeout(() => { if (t.isConnected) { t.classList.remove('armed'); t.innerHTML = '&times;'; } }, 3000);
+      return;
+    }
+    run(() => store.deleteItem(listId, it.id), 'Deleted');
+  }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset && t.dataset.act === 'toggle') {
+    run(() => store.updateItem(listId, t.dataset.id, { done: t.checked, doneAt: t.checked ? today() : '' }), t.checked ? 'Marked done' : 'Reopened');
+  }
+});
+
+document.addEventListener('submit', e => {
+  const f = e.target.closest('[data-edit]');
+  if (!f) return;
+  e.preventDefault();
+  const title = $('edit-title').value.trim();
+  if (!title) return;
+  const patch = { title, notes: $('edit-notes').value.trim(), owner: $('edit-owner').value, due: $('edit-due').value };
+  const id = f.dataset.edit;
+  editingId = null;
+  render();
+  run(() => store.updateItem(listId, id, patch), 'Saved');
+});
+
+$('add-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const title = $('new-title').value.trim();
+  if (!title) return;
+  const it = { ...blankItem({ title, notes: $('new-notes').value.trim(), owner: $('new-owner').value, due: $('new-due').value }) };
+  $('new-title').value = ''; $('new-notes').value = ''; $('new-due').value = '';
+  $('new-title').focus();
+  run(() => store.addItem(listId, it), 'Added');
+});
+
+$('toggle-names').addEventListener('click', () => {
+  const p = $('names-panel'); p.hidden = !p.hidden;
+  if (!p.hidden) { $('name-a').value = names.a; $('name-b').value = names.b; $('name-c').value = names.c; $('name-b').focus(); }
+});
+$('save-names').addEventListener('click', () => {
+  const n = { a: $('name-a').value.trim() || DEFAULT_NAMES.a, b: $('name-b').value.trim() || DEFAULT_NAMES.b, c: $('name-c').value.trim() || DEFAULT_NAMES.c };
+  $('names-panel').hidden = true;
+  run(() => store.updateNames(listId, n), 'Names saved');
+});
+$('copy-link').addEventListener('click', e => copyLink(e.currentTarget));
+$('share-copy').addEventListener('click', e => copyLink(e.currentTarget));
+
+$('start').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('start-btn'); btn.disabled = true; btn.textContent = 'Creating...';
+  const n = { a: $('start-a').value.trim(), b: $('start-b').value.trim(), c: $('start-c').value.trim() };
+  const id = randomId();
+  try {
+    await store.createList(id, n, $('start-seed').checked ? STARTER : []);
+    history.replaceState(null, '', '#list=' + id);
+    listId = id;
+    openList(true);
+  } catch (err) {
+    console.error(err);
+    banner(errMsg(err), true);
+    btn.disabled = false; btn.textContent = 'Create checklist';
+  }
+});
+
+function openList(justCreated) {
+  show('app');
+  if (justCreated) { $('share-url').value = shareUrl(); $('share-panel').hidden = false; }
+  store.subscribe(listId,
+    n => { names = { ...DEFAULT_NAMES, ...n }; editingId ? (pendingRender = true) : render(); },
+    its => { items = its; editingId ? (pendingRender = true) : render(); },
+    err => { console.error(err); banner(errMsg(err), true); });
+  render();
+}
+
+window.addEventListener('hashchange', () => location.reload());
+
+async function boot() {
+  const hash = location.hash.slice(1);
+  if (hash === 'demo') {
+    store = demoStore(); listId = 'demo';
+    banner('Preview with sample data. Nothing you do here is saved.');
+    $('copy-link').hidden = true;
+    return openList(false);
+  }
+  if (!configured) return show('setup');
+  try { store = await firebaseStore(); }
+  catch (e) { console.error(e); return banner("Couldn't load the app. Check your internet connection and reload.", true); }
+  const m = hash.match(/(?:^|&)list=([a-f0-9]{24,64})/i);
+  if (!m) return show('start');
+  listId = m[1];
+  try {
+    if (!(await store.exists(listId))) return show('missing');
+  } catch (e) { console.error(e); return banner(errMsg(e), true); }
+  openList(false);
+}
+boot();
+</script>
+</body>
+</html>
