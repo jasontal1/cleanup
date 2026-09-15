@@ -77,7 +77,8 @@ body.is-dragging,body.is-dragging *{cursor:grabbing!important;user-select:none;-
 .note{font-size:13px;color:var(--muted);margin:4px 0 0}
 .item input[type=checkbox]{width:20px;height:20px;margin:3px 0 0;accent-color:var(--done);cursor:pointer;padding:0}
 .body{display:flex;flex-direction:column;gap:4px;min-width:0}
-.title{font-weight:600;overflow-wrap:anywhere;cursor:pointer}
+.title{font:inherit;font-weight:600;color:inherit;background:none;border:0;padding:0;margin:0;text-align:left;overflow-wrap:anywhere;cursor:pointer}
+.title:hover{text-decoration:underline;text-underline-offset:2px}
 .notes{color:var(--muted);font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
 .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;margin-top:2px}
 .chip{border-radius:999px;padding:2px 9px;border:0;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
@@ -313,7 +314,7 @@ function row(it, draggable) {
     ${draggable ? `<button type="button" class="grip" data-grip="${esc(it.id)}" aria-label="Move ${esc(it.title)}. Use arrow keys to move up or down.">${GRIP}</button>` : ''}
     <input type="checkbox" id="chk-${esc(it.id)}" data-act="toggle" data-id="${esc(it.id)}"${it.done ? ' checked' : ''} aria-label="Mark done: ${esc(it.title)}">
     <div class="body">
-      <label class="title" for="chk-${esc(it.id)}">${esc(it.title)}</label>
+      <button type="button" class="title" data-act="edit" data-id="${esc(it.id)}" title="Tap to edit">${esc(it.title)}</button>
       ${it.notes ? `<div class="notes">${esc(it.notes)}</div>` : ''}
       <div class="meta">
         <button type="button" class="chip o-${esc(it.owner)}" data-act="owner" data-id="${esc(it.id)}" title="Tap to change who owns this">${esc(ownerName(it.owner))}</button>
